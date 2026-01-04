@@ -15,18 +15,13 @@
         justify-content: center;
         font-family: Georgia, serif;
         box-shadow: inset 0 0 180px rgba(255, 215, 0, 0.9);
-        cursor: pointer;
     }
 
     .content {
-        position: relative;
         z-index: 3;
         text-align: center;
         color: white;
-        text-shadow:
-            0 0 12px gold,
-            0 0 35px #ffd700,
-            0 0 55px #ffb700;
+        text-shadow: 0 0 15px gold, 0 0 40px #ffd700;
     }
 
     h1 {
@@ -35,6 +30,135 @@
     }
 
     h2 {
+        font-size: 2.2rem;
+        margin-top: 10px;
+        font-weight: normal;
+    }
+
+    .flower {
+        position: absolute;
+        top: -50px;
+        animation: fall linear infinite;
+        pointer-events: none;
+    }
+
+    @keyframes fall {
+        to { transform: translateY(110vh) rotate(360deg); }
+    }
+
+    .btn {
+        position: fixed;
+        padding: 15px 35px;
+        font-size: 1.4rem;
+        border: none;
+        border-radius: 30px;
+        background: gold;
+        color: #333;
+        box-shadow: 0 0 20px gold;
+        z-index: 10;
+    }
+
+    #playBtn {
+        bottom: 100px;
+    }
+
+    #giftBtn {
+        display: none;
+        bottom: 40px;
+        font-size: 2.5rem;
+        background: transparent;
+        box-shadow: none;
+        color: gold;
+    }
+
+    .panda {
+        font-size: 8rem;
+        margin-top: 20px;
+        animation: pop 1s ease;
+    }
+
+    @keyframes pop {
+        0% { transform: scale(0); }
+        100% { transform: scale(1); }
+    }
+</style>
+</head>
+
+<body>
+
+<div class="content" id="content">
+    <h1>Bhavana</h1>
+    <h2>Pandhi Bhavana</h2>
+</div>
+
+<button class="btn" id="playBtn">▶ Play Music</button>
+<button class="btn" id="giftBtn">🎁 Tap the Gift</button>
+
+<audio id="song1" preload="auto" playsinline></audio>
+<audio id="song2" preload="auto" playsinline></audio>
+
+<script>
+    // 🌸 Falling flowers
+    const flowers = ["🌸","🌹","🌼","🌺","🌻"];
+    for (let i = 0; i < 40; i++) {
+        const f = document.createElement("div");
+        f.className = "flower";
+        f.textContent = flowers[Math.floor(Math.random()*flowers.length)];
+        f.style.left = Math.random()*100 + "vw";
+        f.style.fontSize = (22 + Math.random()*20) + "px";
+        f.style.animationDuration = (6 + Math.random()*6) + "s";
+        document.body.appendChild(f);
+    }
+
+    // 🎵 Audio
+    const song1 = document.getElementById("song1");
+    const song2 = document.getElementById("song2");
+
+    song1.src = "Song.mp3";
+    song2.src = "wakeup.mp3";
+
+    song1.load();
+    song2.load();
+
+    const playBtn = document.getElementById("playBtn");
+    const giftBtn = document.getElementById("giftBtn");
+    const content = document.getElementById("content");
+
+    // ▶ Start music
+    playBtn.addEventListener("click", () => {
+        song1.currentTime = 0;
+        song1.volume = 1;
+        song1.play();
+
+        playBtn.style.display = "none";
+
+        // Show gift after 20 seconds
+        setTimeout(() => {
+            giftBtn.style.display = "block";
+        }, 20000);
+    });
+
+    // 🎁 Gift click
+    giftBtn.addEventListener("click", () => {
+        song1.pause();
+        song1.currentTime = 0;
+
+        content.innerHTML = `
+            <h1>Wake up early</h1>
+            <h2>Pandhi</h2>
+            <div class="panda">🐼</div>
+        `;
+
+        song2.currentTime = 0;
+        song2.volume = 1;
+        song2.play();
+
+        giftBtn.style.display = "none";
+    });
+</script>
+
+</body>
+</html>    h2 {
         font-size: 2.2rem;
         margin-top: 10px;
         font-weight: normal;
