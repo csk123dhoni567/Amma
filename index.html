@@ -48,24 +48,7 @@
     }
 
     @keyframes fall {
-        from { transform: translateY(-60px) rotate(0deg); }
         to { transform: translateY(110vh) rotate(360deg); }
-    }
-
-    .sparkle {
-        position: absolute;
-        width: 5px;
-        height: 5px;
-        background: gold;
-        border-radius: 50%;
-        opacity: 0.8;
-        animation: twinkle 2.5s infinite ease-in-out;
-        pointer-events: none;
-    }
-
-    @keyframes twinkle {
-        0%, 100% { opacity: 0.2; }
-        50% { opacity: 1; }
     }
 
     .tap {
@@ -80,6 +63,20 @@
         font-size: 1.5rem;
         text-shadow: 0 0 10px gold;
     }
+
+    .next-btn {
+        position: fixed;
+        bottom: 40px;
+        padding: 15px 35px;
+        font-size: 1.3rem;
+        border: none;
+        border-radius: 30px;
+        background: gold;
+        color: #333;
+        box-shadow: 0 0 20px gold;
+        display: none;
+        z-index: 5;
+    }
 </style>
 </head>
 
@@ -87,46 +84,61 @@
 
 <div class="tap" id="tap">✨ Tap anywhere to start ✨</div>
 
-<div class="content">
+<div class="content" id="content">
     <h1>Bhavana</h1>
     <h2>Pandhi Bhavana</h2>
 </div>
 
-<audio id="bgMusic" preload="auto" loop></audio>
+<button class="next-btn" id="nextBtn">Next ▶</button>
+
+<audio id="song1"></audio>
+<audio id="song2"></audio>
 
 <script>
-    // 🌸 Falling flowers
-    const flowers = ["🌸", "🌹", "🌼", "🌺", "🌻"];
-    for (let i = 0; i < 45; i++) {
+    // 🌸 Flowers
+    const flowers = ["🌸","🌹","🌼","🌺","🌻"];
+    for (let i = 0; i < 40; i++) {
         const f = document.createElement("div");
         f.className = "flower";
-        f.textContent = flowers[Math.floor(Math.random() * flowers.length)];
-        f.style.left = Math.random() * 100 + "vw";
-        f.style.fontSize = (20 + Math.random() * 25) + "px";
-        f.style.animationDuration = (5 + Math.random() * 6) + "s";
-        f.style.animationDelay = Math.random() * 3 + "s";
+        f.textContent = flowers[Math.floor(Math.random()*flowers.length)];
+        f.style.left = Math.random()*100 + "vw";
+        f.style.fontSize = (22 + Math.random()*20) + "px";
+        f.style.animationDuration = (6 + Math.random()*6) + "s";
         document.body.appendChild(f);
     }
 
-    // ✨ Sparkles
-    for (let i = 0; i < 70; i++) {
-        const s = document.createElement("div");
-        s.className = "sparkle";
-        s.style.left = Math.random() * 100 + "vw";
-        s.style.top = Math.random() * 100 + "vh";
-        s.style.animationDelay = Math.random() * 2 + "s";
-        document.body.appendChild(s);
-    }
+    // 🎵 AUDIO FILES (DIRECT FROM ROOT)
+    const song1 = document.getElementById("song1");
+    const song2 = document.getElementById("song2");
 
-    // 🎵 Local song (same folder)
-    const bgMusic = document.getElementById("bgMusic");
-    bgMusic.src = "song.mp3";
-    bgMusic.volume = 1;
+    song1.src = "Song.mp3";     // ✅ CAPITAL S (as in your repo)
+    song2.src = "wakeup.mp3";
 
-    // ▶ Play on tap (mobile-safe)
-    document.getElementById("tap").addEventListener("click", () => {
-        bgMusic.play().catch(() => {});
-        document.getElementById("tap").style.display = "none";
+    const tap = document.getElementById("tap");
+    const nextBtn = document.getElementById("nextBtn");
+    const content = document.getElementById("content");
+
+    tap.addEventListener("click", () => {
+        song1.play().catch(()=>{});
+        tap.style.display = "none";
+
+        // Show NEXT after 20 seconds
+        setTimeout(() => {
+            nextBtn.style.display = "block";
+        }, 20000);
+    });
+
+    nextBtn.addEventListener("click", () => {
+        song1.pause();
+        song1.currentTime = 0;
+
+        content.innerHTML = `
+            <h1>Wake up early</h1>
+            <h2>Pandhi</h2>
+        `;
+
+        song2.play().catch(()=>{});
+        nextBtn.style.display = "none";
     });
 </script>
 
