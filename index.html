@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Bhavana</title>
+
+<style>
+    body {
+        margin: 0;
+        height: 100vh;
+        overflow: hidden;
+        background: radial-gradient(circle at top, #ffef9a, #d4af37, #6b4e0f);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: Georgia, serif;
+        box-shadow: inset 0 0 180px rgba(255, 215, 0, 0.9);
+        cursor: pointer;
+    }
+
+    .content {
+        position: relative;
+        z-index: 3;
+        text-align: center;
+        color: white;
+        text-shadow:
+            0 0 12px gold,
+            0 0 35px #ffd700,
+            0 0 55px #ffb700;
+    }
+
+    h1 {
+        font-size: 4.5rem;
+        margin: 0;
+    }
+
+    h2 {
+        font-size: 2.2rem;
+        margin-top: 10px;
+        font-weight: normal;
+    }
+
+    .flower {
+        position: absolute;
+        top: -50px;
+        animation: fall linear infinite;
+        pointer-events: none;
+    }
+
+    @keyframes fall {
+        from { transform: translateY(-60px) rotate(0deg); }
+        to { transform: translateY(110vh) rotate(360deg); }
+    }
+
+    .sparkle {
+        position: absolute;
+        width: 5px;
+        height: 5px;
+        background: gold;
+        border-radius: 50%;
+        opacity: 0.8;
+        animation: twinkle 2.5s infinite ease-in-out;
+        pointer-events: none;
+    }
+
+    @keyframes twinkle {
+        0%, 100% { opacity: 0.2; }
+        50% { opacity: 1; }
+    }
+
+    .tap {
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,0.35);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 10;
+        color: white;
+        font-size: 1.5rem;
+        text-shadow: 0 0 10px gold;
+    }
+</style>
+</head>
+
+<body>
+
+<div class="tap" id="tap">✨ Tap anywhere to start ✨</div>
+
+<div class="content">
+    <h1>Bhavana</h1>
+    <h2>Pandhi Bhavana</h2>
+</div>
+
+<audio id="bgMusic" preload="auto" loop></audio>
+
+<script>
+    // 🌸 Falling flowers
+    const flowers = ["🌸", "🌹", "🌼", "🌺", "🌻"];
+    for (let i = 0; i < 45; i++) {
+        const f = document.createElement("div");
+        f.className = "flower";
+        f.textContent = flowers[Math.floor(Math.random() * flowers.length)];
+        f.style.left = Math.random() * 100 + "vw";
+        f.style.fontSize = (20 + Math.random() * 25) + "px";
+        f.style.animationDuration = (5 + Math.random() * 6) + "s";
+        f.style.animationDelay = Math.random() * 3 + "s";
+        document.body.appendChild(f);
+    }
+
+    // ✨ Sparkles
+    for (let i = 0; i < 70; i++) {
+        const s = document.createElement("div");
+        s.className = "sparkle";
+        s.style.left = Math.random() * 100 + "vw";
+        s.style.top = Math.random() * 100 + "vh";
+        s.style.animationDelay = Math.random() * 2 + "s";
+        document.body.appendChild(s);
+    }
+
+    // 🎵 Local song (same folder)
+    const bgMusic = document.getElementById("bgMusic");
+    bgMusic.src = "song.mp3";
+    bgMusic.volume = 1;
+
+    // ▶ Play on tap (mobile-safe)
+    document.getElementById("tap").addEventListener("click", () => {
+        bgMusic.play().catch(() => {});
+        document.getElementById("tap").style.display = "none";
+    });
+</script>
+
+</body>
+</html>
